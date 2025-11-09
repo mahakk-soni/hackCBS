@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Innovation Detail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&family=Montserrat:wght@700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* --- GENERAL & HEADER STYLES (FROM YOUR PROVIDED CODE) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Lato', sans-serif; 
+            background-color: #f4f4f4; 
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #444444; 
+            color: #ffffff; 
+            padding: 15px 20px;
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            height: 80px; /* Increased height slightly for better visual balance */
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: flex-end;
+            cursor: pointer; /* Makes the logo area clickable to go home */
+        }
+
+        .logo-text {
+            font-family: 'Open Sans', sans-serif; 
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-family: 'Lato', sans-serif; 
+            font-size: 18px; 
+            font-weight: 300;
+            color: #cccccc; 
+            margin-left: 10px; 
+            line-height: 1.5; 
+            transform: translateY(3px); 
+        }
+
+        .search-icon-container {
+            font-size: 32px; 
+            cursor: pointer;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        /* --- DETAIL PAGE CONTENT STYLES (MODIFIED FROM PREVIOUS TURN) --- */
+        .content-area {
+            padding: 40px 80px; /* More internal padding for a cleaner look */
+            background-color: #ededed; 
+            max-width: 1000px;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        #back-button {
+            color: #444;
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+
+        #problem-statement-heading {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 3rem; /* BIG BOLD FONT */
+            color: #222;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border-bottom: 4px solid #444444;
+            padding-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #444444;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+
+        #problem-summary {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #555;
+            font-style: italic;
+        }
+
+        .idea-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .idea-list li {
+            background-color: #ffffff;
+            border-left: 6px solid #444444;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .research-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .research-list li {
+            margin-bottom: 10px;
+            padding: 5px 0;
+        }
+
+        .research-list a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        #roadmap-content {
+            height: 180px;
+            overflow-y: scroll; /* Scrollable area */
+            border: 1px solid #dcdcdc;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            line-height: 1.7;
+            font-family: monospace;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo-container" onclick="window.location.href='index.html'">
+            <div class="logo-text">PLIGHT</div>
+            <div class="subtitle">Innovation Suggestion Engine</div>
+        </div>
+
+        <div class="search-icon-container">
+            &#x1F50D;
+        </div>
+    </header>
+
+    <main class="content-area">
+        <a id="back-button" href="index.html">
+            <i class="fa-solid fa-arrow-left"></i> Back to Recommendations
+        </a>
+
+        <h1 id="problem-statement-heading">Loading Innovation...</h1>
+
+        <div id="problem-summary"></div>
+
+        <h2 class="section-title">✨ Innovation Ideas</h2>
+        <ul id="ideas-list" class="idea-list">
+            </ul>
+
+        <h2 class="section-title">📚 Research Papers & Existing Work</h2>
+        <ul id="research-list" class="research-list">
+            </ul>
+        
+        <h2 class="section-title">🗺️ Brief Development Roadmap</h2>
+        <div id="roadmap-content">
+            </div>
+
+    </main>
+
+<script>
+    // --- Detail Page JavaScript Logic (Copied from the last response) ---
+    
+    function loadDetailContent() {
+        const problemStatement = localStorage.getItem('selectedProblemStatement');
+        const detailDataString = localStorage.getItem('detailData');
+        
+        if (!problemStatement || !detailDataString) {
+            document.getElementById('problem-statement-heading').textContent = 'Error: No innovation selected.';
+            document.getElementById('problem-summary').textContent = 'Please return to the main page to select an innovation.';
+            return;
+        }
+
+        try {
+            const detailData = JSON.parse(detailDataString);
+
+            // 1. Set the Main Heading (Big, Bold, Problem Statement)
+            document.getElementById('problem-statement-heading').textContent = problemStatement;
+            document.getElementById('page-title').textContent = problemStatement;
+
+            // 2. Set the Summary (30-40 words)
+            document.getElementById('problem-summary').textContent = detailData.summary || 'Summary not available.';
+
+            // 3. Populate Ideas (60-70 words)
+            const ideasList = document.getElementById('ideas-list');
+            ideasList.innerHTML = ''; 
+            (detailData.ideas || []).forEach(idea => {
+                const li = document.createElement('li');
+                // Split the idea into a bold title (e.g., "Idea 1: Develop...") and the main text
+                const parts = idea.split(':');
+                const title = parts[0];
+                const text = parts.slice(1).join(':').trim() || ''; 
+
+                li.innerHTML = `<strong>${title}:</strong> ${text}`; 
+                ideasList.appendChild(li);
+            });
+
+            // 4. Populate Research Links
+            const researchList = document.getElementById('research-list');
+            researchList.innerHTML = ''; 
+            (detailData.research || []).forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<i class="fa-solid fa-link"></i> <a href="${item.link}" target="_blank">${item.name}</a>`;
+                researchList.appendChild(li);
+            });
+
+            // 5. Populate Roadmap (Scrolling)
+            document.getElementById('roadmap-content').textContent = detailData.roadmap || 'Roadmap content not available.';
+
+        } catch (e) {
+            document.getElementById('problem-statement-heading').textContent = 'Error: Invalid data format.';
+            console.error('Error parsing detail data:', e);
+        }
+    }
+
+    // Run the function when the page loads
+    window.onload = loadDetailContent; 
+</script>
+
+</body>
+</html>
