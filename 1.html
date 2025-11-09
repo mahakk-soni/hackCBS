@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLIGHT Innovation Suggestion Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* CSS STYLES (Unchanged) */
+        :root {
+            --dark-gray: #444444;
+            --light-gray-bg: #f5f5f5;
+            --card-color: #555555;
+            --white: #ffffff;
+            --max-width: 1000px;
+        }
+
+        /* --- General Reset & Layout --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-gray-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: var(--max-width);
+            padding-bottom: 50px;
+        }
+
+        /* --- Header Styles --- */
+        .header {
+            width: 100%;
+            background-color: var(--dark-gray);
+            color: var(--white);
+            text-align: center;
+            padding: 40px 0 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 55px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--white);
+            margin: 5px 0 0 0;
+            padding-bottom: 20px;
+        }
+
+        /* --- Search Box Styles --- */
+        .search-section {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0 30px 0;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--white);
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .search-icon {
+            color: var(--dark-gray);
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            flex-grow: 1;
+            font-size: 16px;
+            color: #777;
+        }
+
+        /* --- Recommendation Header --- */
+        .recommendation-header {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 20px 0;
+            color: #555;
+        }
+
+        /* --- Card Carousel Styles --- */
+        .card-carousel-container {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .card-track {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card {
+            min-width: calc(33.333% - 20px);
+            margin: 0 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: var(--card-color);
+            color: var(--white);
+        }
+
+        .card-image-wrapper {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-body {
+            padding: 15px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-text {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.3;
+        }
+
+        /* --- Navigation Styles --- */
+        .navigation-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .nav-button {
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .nav-button:disabled {
+            color: #ccc;
+            cursor: default;
+        }
+
+        .indicator-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            background-color: #ccc;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot.active {
+            background-color: var(--dark-gray);
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 900px) {
+            .card {
+                min-width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .logo {
+                font-size: 45px;
+            }
+            .subtitle {
+                font-size: 18px;
+            }
+            .card {
+                min-width: 100%;
+                margin: 0 0 20px 0;
+            }
+            .navigation-container {
+                padding: 0 10px;
+            }
+            /* Hiding dots on small screens for simplicity, but they are now dynamically generated */
+            .indicator-dots {
+                 display: none; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">PLIGHT</h1>
+            <p class="subtitle">Innovation Suggestion Engine</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" placeholder="Search for problems: e.g., 'health', 'water', 'AI'" class="search-input" id="searchInput">
+            </div>
+        </div>
+
+        <h2 class="recommendation-header">Recommended For You</h2>
+
+        <div class="card-carousel-container">
+            <div class="card-track" id="cardTrack"></div>
+        </div>
+
+        <div class="navigation-container">
+            <button class="nav-button prev-button" id="prevButton" disabled>&leftarrow; Previous</button>
+            <div class="indicator-dots" id="indicatorDots"></div>
+            <button class="nav-button next-button" id="nextButton">Next &rightarrow;</button>
+        </div>
+    </main>
+
+    <script>
+        // --- DATA: All problem statements ---
+        // This is now the single source of truth for all cards.
+        const allProblemStatements = [
+            {
+                id: 1,
+                text: "Blockchain-based student credential system",
+                imgSrc: "https://picsum.photos/id/10/500/300"
+            },
+            {
+                id: 2,
+                text: "Affordable clean water purifier for rural areas",
+                imgSrc: "https://picsum.photos/id/1015/500/300"
+            },
+            {
+                id: 3,
+                text: "IoT-based traffic congestion monitor",
+                imgSrc: "https://picsum.photos/id/357/500/300"
+            },
+            {
+                id: 4,
+                text: "Developing biodegradable plastic packaging alternatives",
+                imgSrc: "https://picsum.photos/id/23/500/300"
+            },
+            {
+                id: 5,
+                text: "AI-powered personalized mental health chatbot",
+                imgSrc: "https://picsum.photos/id/40/500/300"
+            },
+            {
+                id: 6,
+                text: "AI platform for farmers to detect crop diseases",
+                imgSrc: "https://picsum.photos/id/119/500/300"
+            },
+            {
+                id: 7,
+                text: "Gamified mobile app for learning financial literacy",
+                imgSrc: "https://picsum.photos/id/145/500/300"
+            },
+            {
+                id: 8,
+                text: "Smart recycling bin that auto-sorts waste materials",
+                imgSrc: "https://picsum.photos/id/183/500/300"
+            },
+            {
+                id: 9,
+                text: "Decentralized energy grid for local communities",
+                imgSrc: "https://picsum.photos/id/200/500/300"
+            },
+            {
+                id: 10,
+                text: "AR tool for virtual furniture try-on in homes",
+                imgSrc: "https://picsum.photos/id/287/500/300"
+            },
+            {
+                id: 11,
+                text: "Last-mile delivery robot for urban areas",
+                imgSrc: "https://picsum.photos/id/301/500/300"
+            },
+            {
+                id: 12,
+                text: "Wearable sensor for monitoring elderly patients remotely",
+                imgSrc: "https://picsum.photos/id/365/500/300"
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Get DOM Elements ---
+            const track = document.getElementById('cardTrack');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            const dotsContainer = document.getElementById('indicatorDots');
+            const searchInput = document.getElementById('searchInput');
+
+            // --- State Variables ---
+            let currentIndex = 0;
+            let currentCards = []; // To store the dynamically created card elements
+            let cardsPerView = 3; // Default
+
+            // --- Helper Function: Get visible cards based on screen size ---
+            const getCardsPerView = () => {
+                if (window.innerWidth <= 600) {
+                    return 1;
+                } else if (window.innerWidth <= 900) {
+                    return 2;
+                }
+                return 3;
+            };
+
+            // --- Main Function: Render UI (Cards and Dots) ---
+            const renderUI = (problems) => {
+                // 1. Clear existing content
+                track.innerHTML = '';
+                dotsContainer.innerHTML = '';
+                
+                // 2. Generate and append new cards
+                problems.forEach(problem => {
+                    const cardHTML = `
+                        <div class="card">
+                            <div class="card-image-wrapper">
+                                <img src="${problem.imgSrc}" alt="${problem.text}" class="card-image">
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">${problem.text}</p>
+                            </div>
+                        </div>
+                    `;
+                    track.innerHTML += cardHTML;
+                });
+
+                // 3. Update the 'currentCards' array
+                currentCards = track.querySelectorAll('.card');
+
+                // 4. Generate and append new dots
+                cardsPerView = getCardsPerView();
+                const totalPages = currentCards.length > 0 ? Math.max(1, currentCards.length - cardsPerView + 1) : 0;
+
+                for (let i = 0; i < totalPages; i++) {
+                    const dot = document.createElement('span');
+                    dot.classList.add('dot');
+                    dotsContainer.appendChild(dot);
+                }
+                
+                // 5. Reset carousel to the beginning and update
+                currentIndex = 0;
+                updateCarousel();
+            };
+
+            // --- Carousel Logic ---
+            const updateCarousel = () => {
+                cardsPerView = getCardsPerView();
+                const cardCount = currentCards.length;
+
+                if (cardCount === 0) {
+                    // Handle no results
+                    prevButton.disabled = true;
+                    nextButton.disabled = true;
+                    return;
+                }
+
+                const cardWidth = currentCards[0].offsetWidth;
+                const margin = 20; // 10px left + 10px right
+
+                // 1. Translate the track
+                const translateX = -(currentIndex * (cardWidth + margin));
+                track.style.transform = `translateX(${translateX}px)`;
+
+                // 2. Update Button States
+                prevButton.disabled = currentIndex === 0;
+                nextButton.disabled = currentIndex >= cardCount - cardsPerView;
+                
+                // 3. Update Dots
+                const dots = dotsContainer.querySelectorAll('.dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            };
+
+            // --- Search Functionality ---
+            const handleSearch = (keywords) => {
+                const searchTerm = keywords.trim().toLowerCase();
+
+                // If search is empty, reset to the full list
+                if (searchTerm === '') {
+                    renderUI(allProblemStatements);
+                    return;
+                }
+
+                // Sort the array: matching items first, non-matching second
+                const sortedProblems = [...allProblemStatements].sort((a, b) => {
+                    const aMatches = a.text.toLowerCase().includes(searchTerm);
+                    const bMatches = b.text.toLowerCase().includes(searchTerm);
+
+                    if (aMatches && !bMatches) return -1; // a comes first
+                    if (!aMatches && bMatches) return 1;  // b comes first
+                    return 0; // Keep original relative order
+                });
+
+                // Re-render the UI with the sorted list
+                renderUI(sortedProblems);
+            };
+
+            // --- Event Listeners ---
+            prevButton.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateCarousel();
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                cardsPerView = getCardsPerView(); // Recalculate just in case
+                if (currentIndex < currentCards.length - cardsPerView) {
+                    currentIndex++;
+                    updateCarousel();
+                }
+            });
+
+            searchInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    handleSearch(searchInput.value);
+                }
+            });
+
+            // Re-run updateCarousel on window resize to adjust layout
+            window.addEventListener('resize', () => {
+                // Re-render to fix dot calculations and positions
+                handleSearch(searchInput.value);
+            });
+
+            // --- Initial Load ---
+            // Render the full list on page load
+            renderUI(allProblemStatements);
+        });
+    </script>
+</body>
+</html>
